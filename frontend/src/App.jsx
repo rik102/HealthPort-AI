@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import NavBar from './components/NavBar';
 import UploadForm from './components/UploadForm';
 import AnalysisResults from './components/AnalysisResults';
-import GoogleSignInButton from './components/GoogleSignInButton';
+import AboutPage from './components/About';
+import HistoryPage from './components/History';
 import axios from 'axios';
 
 function App() {
@@ -10,8 +13,8 @@ function App() {
   const [isUploading, setIsUploading] = useState(false);
 
   const handleGoogleSignIn = () => {
-    // Implement Google sign-in logic here
     console.log('Google sign-in clicked');
+    // Implement Google sign-in logic here
   };
 
   const handleFileUpload = async (file) => {
@@ -19,6 +22,7 @@ function App() {
     formData.append('file', file);
 
     try {
+      setIsUploading(true);
       const response = await axios.post('http://localhost:8000/analysis/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -38,63 +42,71 @@ function App() {
       } else {
         throw new Error('Error uploading file: ' + err.message);
       }
+    } finally {
+      setIsUploading(false);
     }
   };
 
   return (
-    <div className="app-container">
-      <div className="content-wrapper">
-        <header className="app-header">
-          <div className="header-content">
-            <div className="logo-container">
-              <h1 className="logo-text">HealthPort AI</h1>
-              <p className="logo-subtitle">Your AI-Powered Health Report Analyzer</p>
-            </div>
-            <div className="signin-button-container">
-              <GoogleSignInButton onClick={handleGoogleSignIn} />
-            </div>
-          </div>
-        </header>
+    <Router>
+      <div className="app-container">
+        <NavBar handleGoogleSignIn={handleGoogleSignIn} />
+        
+        <div className="background-animation">
+          <div className="gradient-circle circle-1"></div>
+          <div className="gradient-circle circle-2"></div>
+          <div className="gradient-circle circle-3"></div>
+        </div>
 
-        <main className="main-content">
-          <section className="hero-section">
-            <div className="hero-text">
-              <h2>Transform Your Medical Reports</h2>
-              <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
-            </div>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">98%</div>
-                <div className="stat-label">Accuracy</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">24/7</div>
-                <div className="stat-label">Availability</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">Instant</div>
-                <div className="stat-label">Analysis</div>
-              </div>
-            </div>
-          </section>
+        <div className="content-wrapper">
+          <Routes>
+            <Route path="/" element={
+              <>
+                <main className="main-content">
+                  <section className="hero-section">
+                    <div className="hero-text">
+                      <h2>Transform Your Medical Reports</h2>
+                      <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
+                    </div>
+                    <div className="hero-stats">
+                      <div className="stat-item">
+                        <div className="stat-number">98%</div>
+                        <div className="stat-label">Accuracy</div>
+                      </div>
+                      <div className="stat-item">
+                        <div className="stat-number">24/7</div>
+                        <div className="stat-label">Availability</div>
+                      </div>
+                      <div className="stat-item">
+                        <div className="stat-number">Instant</div>
+                        <div className="stat-label">Analysis</div>
+                      </div>
+                    </div>
+                  </section>
 
-          <section className="upload-section">
-            <UploadForm onUpload={handleFileUpload} />
-          </section>
+                  <section className="upload-section">
+                    <UploadForm onUpload={handleFileUpload} isUploading={isUploading} />
+                  </section>
 
-          {analysis && (
-            <section className="results-section">
-              <AnalysisResults analysis={analysis} />
-            </section>
-          )}
-        </main>
+                  {analysis && (
+                    <section className="results-section">
+                      <AnalysisResults analysis={analysis} />
+                    </section>
+                  )}
+                </main>
+              </>
+            } />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+          </Routes>
 
-        <footer className="app-footer">
-          <p>© 2024 HealthPort AI. All rights reserved.</p>
-        </footer>
+          <footer className="app-footer">
+            <p>© 2024 HealthPort AI. All rights reserved.</p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
-export default App; 
+export default App;

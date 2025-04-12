@@ -1,0 +1,122 @@
+.history-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(29, 185, 84, 0.1);
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  .history-container h2 {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .history-list {
+    margin-top: 2rem;
+  }
+  
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: rgba(29, 185, 84, 0.05);
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+  }
+  
+  .history-item:hover {
+    transform: translateX(5px);
+    background: rgba(29, 185, 84, 0.1);
+  }
+  
+  .history-info {
+    flex: 1;
+  }
+  
+  .history-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .history-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .history-summary {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  
+  .history-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .history-button {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .view-button {
+    background: var(--primary-color);
+    color: white;
+  }
+  
+  .view-button:hover {
+    background: var(--primary-dark);
+  }
+  
+  .delete-button {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+  }
+  
+  .delete-button:hover {
+    background: rgba(255, 0, 0, 0.2);
+  }
+  
+  .empty-history {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+  }
+  
+  .empty-history i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  @media (max-width: 768px) {
+    .history-container {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    
+    .history-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .history-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }

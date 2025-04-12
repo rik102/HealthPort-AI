@@ -2,6 +2,13 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  --primary-color: #1DB954;
+  --primary-dark: #1ed760;
+  --background: #ffffff;
+  --text-primary: #191414;
+  --text-secondary: #535353;
+  --gradient-1: linear-gradient(135deg, #1DB954, #1ed760);
+  --gradient-2: linear-gradient(135deg, #1ed760, #1DB954);
 }
 
 body {
@@ -9,3 +16,4 @@ body {
   min-width: 320px;
   min-height: 100vh;
 } 
+
