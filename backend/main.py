@@ -14,7 +14,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-origins = ["http://localhost:3000"]  # Adjust if your frontend runs on a different port
+# Allow requests from both Vite dev server and potential production frontend
+origins = [
+    "http://localhost:5173",  # Vite dev server
+    "http://localhost:3000",  # React dev server (if needed)
+    "http://127.0.0.1:5173",  # Alternative localhost
+    "http://127.0.0.1:3000"   # Alternative localhost
+]
 
 app.add_middleware(
     CORSMiddleware,
