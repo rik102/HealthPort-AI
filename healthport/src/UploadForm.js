@@ -8,15 +8,25 @@ const uploadFile = () =>{
     // dropzone hook: functions to define behavior of dropzone, and file input
     const {getRootProps, getInputProps} = useDropzone({
         accept: '.pdf, image/*',
-        onDrop: (acceptedFiles) => { // gets called when files are dropped
+        onDrop: (acceptedFiles) => { // function that gets called when files are dropped
             //console.log(acceptedFiles);
+            //shows the preview: , well first part of it
             setFiles(acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)})));
+            // map is method that loops through acceptedFiles array
         }
     });
 
-    
+    return (
+        // the dropzone area
+        <div>
+            <div {...getRootProps()} style={styles.dropzone}>
+                <input {...getInputProps()} />
+                <p>Drag and drop a PDF or image here, or click to select one</p>
+            </div>
+        </div>
+    )
 }
 
-// going to do basic one first, no display preview yet
+// going to do basic one first, no display preview yet (or maybe yes)
 
 // document progress: styling, parse contents or upload file itself, submit button, backend server
