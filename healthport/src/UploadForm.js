@@ -45,6 +45,15 @@ const uploadFile = () =>{
     );
 };
 
+const styles = {
+    // dropzone, previewContainer, filePreview, previewImage
+    dropzone: {
+        
+    }
+}
+
+export default UploadFile;
+
 // worry about format later, can i see what i have as of rn
 // can integrate by importing into App.js, or routing if different pages
 
