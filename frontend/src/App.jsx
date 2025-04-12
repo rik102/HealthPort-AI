@@ -18,6 +18,10 @@ function App() {
   };
 
   const handleFileUpload = async (file) => {
+    // Clear previous analysis when new file is uploaded
+    setAnalysis(null);
+    setIsUploading(true);
+
     const formData = new FormData();
     formData.append('file', file);
 
