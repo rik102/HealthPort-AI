@@ -9,6 +9,7 @@ const uploadFile = () =>{
     const {getRootProps, getInputProps} = useDropzone({
         accept: '.pdf, image/*',
         onDrop: (acceptedFiles) => { // function that gets called when files are dropped
+            
             //console.log(acceptedFiles);
             //shows the preview: , well first part of it
             setFiles(acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)})));
@@ -17,6 +18,7 @@ const uploadFile = () =>{
     });
 
     return (
+
         // the dropzone area
         <div>
             <div {...getRootProps()} style={styles.dropzone}>
@@ -25,17 +27,24 @@ const uploadFile = () =>{
             </div>
 
             {/*Preview of file*/}
+            {/*files from above*/}
+            {/*previewContainer = preview for all the containers*/}
             <div style={styles.previewContainer}>
-                {files.map((file) => (
-                    <div>
-                        
+                {files.map((file) => ( 
+                    <div key={file.name} style={styles.filePreview}>
+                        {file.type.startsWith('image') ? (
+                            <img src={file.preview} alt="preview" style={styles.previewImage} />
+                        ) : (
+                            <p>{file.name}</p>
+                        )}
                     </div>
-                ))}
+                ))} {/*?*/}
             </div>
 
         </div>
     );
-}
+};
+
 // worry about format later, can i see what i have as of rn
 // can integrate by importing into App.js, or routing if different pages
 
