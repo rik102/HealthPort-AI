@@ -23,9 +23,21 @@ const uploadFile = () =>{
                 <input {...getInputProps()} />
                 <p>Drag and drop a PDF or image here, or click to select one</p>
             </div>
+
+            {/*Preview of file*/}
+            <div style={styles.previewContainer}>
+                {files.map((file) => (
+                    <div>
+                        
+                    </div>
+                ))}
+            </div>
+
         </div>
-    )
+    );
 }
+// worry about format later, can i see what i have as of rn
+// can integrate by importing into App.js, or routing if different pages
 
 // going to do basic one first, no display preview yet (or maybe yes)
 
