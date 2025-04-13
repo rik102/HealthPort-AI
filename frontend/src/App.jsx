@@ -7,43 +7,24 @@ import axios from 'axios';
 
 function App() {
   const [analysis, setAnalysis] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleGoogleSignIn = () => {
     // Implement Google sign-in logic here
     console.log('Google sign-in clicked');
   };
 
-  const handleFileUpload = async (file) => {
-    // Clear previous analysis when new file is uploaded
-    setAnalysis(null);
-    setIsUploading(true);
-
-    const formData = new FormData();
-    formData.append('file', file);
-
+  const handleFileUpload = async (file, analysisData) => {
     try {
-      const response = await axios.post('http://localhost:8000/analysis/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
-      if (response.data.status === 'success') {
-        setAnalysis(response.data.analysis);
-      } else {
-        throw new Error('Failed to analyze the document');
+      if (!analysisData) {
+        throw new Error('No analysis data received');
       }
-    } catch (err) {
-      if (err.response) {
-        throw new Error(err.response.data.detail || 'Server error occurred');
-      } else if (err.request) {
-        throw new Error('No response from server. Please check if the backend is running.');
-      } else {
-        throw new Error('Error uploading file: ' + err.message);
-      }
-    } finally {
-      setIsUploading(false);
+      setAnalysis(analysisData);
+      setError(null);
+    } catch (error) {
+      console.error('Error handling file upload:', error);
+      setError(error.message);
+      setAnalysis(null);
     }
   };
 
@@ -85,18 +66,22 @@ function App() {
           </section>
 
           <section className="upload-section">
-            <UploadForm onUpload={handleFileUpload} />
+            {!analysis ? (
+              <UploadForm onUpload={handleFileUpload} />
+            ) : (
+              <AnalysisResults analysis={analysis} />
+            )}
           </section>
 
-          {analysis && (
-            <section className="results-section">
-              <AnalysisResults analysis={analysis} />
-            </section>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
           )}
         </main>
 
         <footer className="app-footer">
-          <p>© 2024 HealthPort AI. All rights reserved.</p>
+          <p>© 2025 HealthPort AI. All rights reserved.</p>
         </footer>
       </div>
     </div>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './UploadForm.css';
+import axios from 'axios';
 
 const UploadForm = ({ onUpload }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -28,39 +30,121 @@ const UploadForm = ({ onUpload }) => {
     return true;
   };
 
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    setError(null);
-
-    const file = e.dataTransfer.files[0];
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
     if (!file) return;
 
-    if (!validateFile(file)) return;
+    if (!file.name.endsWith('.pdf')) {
+      setError('Please upload a PDF file');
+      return;
+    }
 
     setIsUploading(true);
+    setError(null);
+    setProgress(0);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
     try {
-      await onUpload(file);
-    } catch (err) {
-      setError(err.message || 'Error uploading file. Please try again.');
-    } finally {
+      const response = await axios.post('http://localhost:8000/analysis/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        },
+      });
+
+      if (response.data) {
+        await onUpload(file, response.data);
+        setIsUploading(false);
+        setProgress(100);
+      } else {
+        throw new Error('No analysis data received');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      let errorMessage = 'Failed to analyze the document';
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response:', error.response.data);
+        errorMessage = error.response.data.detail || errorMessage;
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+        errorMessage = 'No response from server. Please try again.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up request:', error.message);
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
       setIsUploading(false);
+      setProgress(0);
     }
-  };
+  }, [onUpload]);
 
   const handleFileSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!validateFile(file)) return;
+    if (!file.name.endsWith('.pdf')) {
+      setError('Please upload a PDF file');
+      return;
+    }
 
     setIsUploading(true);
+    setError(null);
+    setProgress(0);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
     try {
-      await onUpload(file);
-    } catch (err) {
-      setError(err.message || 'Error uploading file. Please try again.');
-    } finally {
+      const response = await axios.post('http://localhost:8000/analysis/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        },
+      });
+
+      if (response.data) {
+        await onUpload(file, response.data);
+        setIsUploading(false);
+        setProgress(100);
+      } else {
+        throw new Error('No analysis data received');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      let errorMessage = 'Failed to analyze the document';
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response:', error.response.data);
+        errorMessage = error.response.data.detail || errorMessage;
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+        errorMessage = 'No response from server. Please try again.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up request:', error.message);
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
       setIsUploading(false);
+      setProgress(0);
     }
   };
 
@@ -70,7 +154,7 @@ const UploadForm = ({ onUpload }) => {
         className={`upload-area ${isDragging ? 'dragging' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        onDrop={onDrop}
       >
         <input
           type="file"
