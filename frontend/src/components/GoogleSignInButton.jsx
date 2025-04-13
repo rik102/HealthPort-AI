@@ -1,5 +1,5 @@
 import React from 'react';
-import './GoogleSignInButton.css';
+import './NavBar.css';
 
 const GoogleSignInButton = ({ onClick }) => {
   return (
