@@ -20,7 +20,8 @@ origins = [
     "http://localhost:3000",  # React dev server (if needed)
     "http://127.0.0.1:5173",  # Alternative localhost
     "http://127.0.0.1:3000",   # Alternative localhost
-    "https://www.aihealthport.tech"
+    "https://www.aihealthport.tech",
+    "https://aihealthport.tech"
 ]
 
 app.add_middleware(
