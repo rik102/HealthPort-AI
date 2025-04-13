@@ -14,6 +14,13 @@ import tempfile
 from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
+from database.mongodb_client import MongoDB
+from pydantic import BaseModel
+
+class User(BaseModel):
+    username: str
+    email: str
+    profile_picture: str
 
 # Set up logging
 logging.basicConfig(
@@ -40,6 +47,21 @@ except Exception as e:
     raise
 
 router = APIRouter()
+
+
+@router.post("/google-login")
+async def google_login(user_data: User):
+    """Handle Google Login and store user data"""
+    try:
+        # Save or update user in MongoDB
+        existing_user = await MongoDB.save_user(user_data.dict())
+
+        if existing_user:
+            return {"message": "User already exists", "user": existing_user}
+        else:
+            return {"message": "User registered successfully", "user": user_data.dict()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error during user login: {str(e)}")
 
 # Configure Gemini
 try:
@@ -337,8 +359,17 @@ Here's the lab report text:
                     status_code=500,
                     detail=f"Failed to store analysis: {str(e)}"
                 )
+            
+            analysis_data = {
+            "user_email": user.email,
+            "timestamp": datetime.utcnow(),
+            "filename": file.filename,
+            "analysis": analysis
+            }
 
-            return analysis
+            await MongoDB.save_analysis(analysis_data)
+
+            return {"message": "File uploaded and analysis saved successfully", "analysis": analysis}
 
         except Exception as e:
             logger.error(f"Error generating analysis: {str(e)}")
@@ -382,3 +413,14 @@ async def get_latest_analysis():
         )
 
 # You'll add more routes here later
+@router.get("/history/{user_email}")
+async def get_user_history(user_email: str):
+    """Fetch a user's lab report history"""
+    try:
+        user_reports = await MongoDB.get_data("analyses", {"user_email": user_email})
+        if not user_reports:
+            raise HTTPException(status_code=404, detail="No reports found")
+        
+        return {"reports": user_reports}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching history: {str(e)}")
