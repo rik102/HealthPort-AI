@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import History from './components/History';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import doctorIllustration from './assets/doctor-illustration.png';
 
 // Create a separate component for the main content to use the hook
 const MainContent = () => {
@@ -58,6 +59,7 @@ const MainContent = () => {
     setUser(null);
     setShowDropdown(false);
     navigate('/');
+    window.location.reload();
   };
 
   const handleFileUpload = async (file, analysisData) => {
@@ -114,23 +116,26 @@ const MainContent = () => {
             <Route path="/" element={
               <>
                 <section className="hero-section">
-                  <div className="hero-text">
-                    <h2>Transform Your Medical Reports</h2>
-                    <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
-                  </div>
-                  <div className="hero-stats">
-                    <div className="stat-item">
-                      <div className="stat-number">98%</div>
-                      <div className="stat-label">Accuracy</div>
+                  <div className="hero-content">
+                    <div className="hero-text">
+                      <h2>Transform Your Medical Reports</h2>
+                      <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
+                      <div className="hero-stats">
+                        <div className="stat-item">
+                          <div className="stat-number">98%</div>
+                          <div className="stat-label">Accuracy</div>
+                        </div>
+                        <div className="stat-item">
+                          <div className="stat-number">24/7</div>
+                          <div className="stat-label">Availability</div>
+                        </div>
+                        <div className="stat-item">
+                          <div className="stat-number">Instant</div>
+                          <div className="stat-label">Analysis</div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="stat-item">
-                      <div className="stat-number">24/7</div>
-                      <div className="stat-label">Availability</div>
-                    </div>
-                    <div className="stat-item">
-                      <div className="stat-number">Instant</div>
-                      <div className="stat-label">Analysis</div>
-                    </div>
+                    <img src={doctorIllustration} alt="Doctor with medical report" className="doctor-illustration" />
                   </div>
                 </section>
 

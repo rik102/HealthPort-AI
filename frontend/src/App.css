@@ -25,6 +25,7 @@ body {
 
 .app-container {
   min-height: 100vh;
+  background: linear-gradient(135deg, #e6fff2 0%, #00b894 100%);
   position: relative;
   overflow: hidden;
 }
@@ -76,11 +77,11 @@ body {
 }
 
 .content-wrapper {
-  position: relative;
-  z-index: 1;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .app-header {
@@ -150,70 +151,92 @@ body {
 }
 
 .hero-section {
-  text-align: center;
-  padding: 4rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  gap: 2rem;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-text {
+  max-width: 600px;
+  z-index: 2;
   animation: fadeInUp 1s ease-out;
 }
 
 .hero-text h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+  font-size: 3.5rem;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
 }
 
 .hero-text p {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 2rem;
   line-height: 1.6;
 }
 
 .hero-stats {
   display: flex;
-  justify-content: center;
-  gap: 4rem;
-  margin-top: 3rem;
+  gap: 2rem;
+  margin-top: 2rem;
   animation: fadeInUp 1s ease-out 0.3s backwards;
 }
 
 .stat-item {
-  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
   padding: 1.5rem;
-  background: rgba(29, 185, 84, 0.1);
-  border-radius: 15px;
-  transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-  transform: translateY(-5px);
-  background: rgba(29, 185, 84, 0.15);
+  border-radius: 12px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .stat-number {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: #1DB954;
   margin-bottom: 0.5rem;
 }
 
 .stat-label {
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: #666;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
+.doctor-illustration {
+  width: 45%;
+  max-width: 500px;
+  height: auto;
+  z-index: 1;
+  object-fit: contain;
+  animation: slideInFromRight 1s ease-out;
+  margin-right: -2rem;
+}
+
 .upload-section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
-  border: 2px solid rgba(29, 185, 84, 0.2);
-  box-shadow: 0 10px 30px rgba(29, 185, 84, 0.1);
-  animation: fadeInUp 1s ease-out 0.6s backwards;
+  padding: 2rem;
+  margin-top: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .results-section {
@@ -321,37 +344,66 @@ body {
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
+  0% {
     transform: translateY(20px);
+    opacity: 0;
   }
-  to {
-    opacity: 1;
+  100% {
     transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .content-wrapper {
-    padding: 1rem;
-  }
-
-  .logo-text {
+@media (max-width: 1024px) {
+  .hero-text h2 {
     font-size: 2.5rem;
   }
 
-  .hero-text h2 {
-    font-size: 2rem;
+  .doctor-illustration {
+    width: 40%;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  .hero-content {
+    flex-direction: column;
+  }
+
+  .hero-text {
+    margin-bottom: 2rem;
   }
 
   .hero-stats {
-    flex-direction: column;
-    gap: 2rem;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
-  .upload-section {
-    padding: 1.5rem;
+  .doctor-illustration {
+    width: 100%;
+    max-width: 300px;
+    margin: 2rem auto;
+    animation: fadeInUp 1s ease-out 0.6s backwards;
   }
 }
 
