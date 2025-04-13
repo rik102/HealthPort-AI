@@ -7,14 +7,19 @@ import AnalysisResults from './components/AnalysisResults';
 import AboutPage from './components/About';
 import HistoryPage from './components/History';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
 
 function App() {
   const [analysis, setAnalysis] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+
+
   const handleGoogleSignIn = () => {
     console.log('Google sign-in clicked');
     // Implement Google sign-in logic here
+
+
   };
 
   const handleFileUpload = async (file) => {
