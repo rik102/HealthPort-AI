@@ -330,4 +330,32 @@ body {
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(29, 185, 84, 0.1);
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(29, 185, 84, 0.15);
+  transform: translateY(-1px);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
 } 

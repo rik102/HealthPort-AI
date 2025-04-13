@@ -3,16 +3,36 @@ import './App.css';
 import UploadForm from './components/UploadForm';
 import AnalysisResults from './components/AnalysisResults';
 import GoogleSignInButton from './components/GoogleSignInButton';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
-function App() {
+// Create a separate component for the main content to use the hook
+const MainContent = () => {
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
-  const handleGoogleSignIn = () => {
-    // Implement Google sign-in logic here
-    console.log('Google sign-in clicked');
-  };
+  const login = useGoogleLogin({
+    onSuccess: async (response) => {
+      try {
+        const res = await axios.get(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${response.access_token}`,
+            },
+          }
+        );
+        setUser(res.data);
+        console.log('User info:', res.data);
+      } catch (err) {
+        console.error('Error fetching user info:', err);
+      }
+    },
+    onError: (error) => {
+      console.error('Login Failed:', error);
+    },
+  });
 
   const handleFileUpload = async (file, analysisData) => {
     try {
@@ -38,7 +58,14 @@ function App() {
               <p className="logo-subtitle">Your AI-Powered Health Report Analyzer</p>
             </div>
             <div className="signin-button-container">
-              <GoogleSignInButton onClick={handleGoogleSignIn} />
+              {user ? (
+                <div className="user-info">
+                  <img src={user.picture} alt={user.name} className="user-avatar" />
+                  <span className="user-name">{user.name}</span>
+                </div>
+              ) : (
+                <GoogleSignInButton onClick={login} />
+              )}
             </div>
           </div>
         </header>
@@ -85,6 +112,14 @@ function App() {
         </footer>
       </div>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <MainContent />
+    </GoogleOAuthProvider>
   );
 }
 
