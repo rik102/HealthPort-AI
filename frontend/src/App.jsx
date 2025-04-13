@@ -9,6 +9,7 @@ import History from './components/History';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import doctorIllustration from './assets/doctor-illustration.png';
+import logoIcon from './assets/logo.png';
 
 // Create a separate component for the main content to use the hook
 const MainContent = () => {
@@ -81,10 +82,15 @@ const MainContent = () => {
       <div className="content-wrapper">
         <header className="app-header">
           <div className="header-content">
+            
             <Link to="/" className="logo-container">
+              <img src={logoIcon} alt="HealthPort AI Logo" className='logo-icon' />
+              <div className='logo-text-wrapper'>
               <h1 className="logo-text">HealthPort AI</h1>
               <p className="logo-subtitle">Your AI-Powered Health Report Analyzer</p>
+              </div>
             </Link>
+
             <div className="nav-links">
               {user && (
                 <>
