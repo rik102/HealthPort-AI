@@ -152,6 +152,19 @@ const MainContent = () => {
                     <AnalysisResults analysis={analysis} />
                   )}
                 </section>
+
+
+                <section className='features-section'>
+                  <div className='feature-card'>
+                    <h3>Understand What It Means</h3>
+                    <p>From cholesterol to vitamin deficiencies, we explain what each value means and what to do next.</p>
+                  </div>
+                  <div className='feature-card'>
+                    <h3>Keep Track Effortlessly</h3>
+                    <p>Securely save your history, monitor trends over time, and get notified about concerning changes.</p>
+                  </div>
+                </section>
+
               </>
             } />
             <Route path="/dashboard" element={<Dashboard />} />

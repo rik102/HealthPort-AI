@@ -279,11 +279,78 @@ body {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 12rem;
 }
 
 .results-section {
   margin-top: 3rem;
   animation: fadeInUp 1s ease-out;
+}
+/*
+.features-section {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.feature-card {
+  flex: 1 1 22%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  min-width: 220px;
+  transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+*/
+
+.features-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12rem;
+  padding: 4rem 2rem;
+  width: 100%;
+}
+
+.feature-card {
+  width: 100%;
+  max-width: 1200px;         /* keeps content nicely contained */
+  margin: 0 auto;            /* center horizontally */
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  cursor: default;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card h3 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1DB954;
+  margin-bottom: 1rem;
+}
+
+.feature-card p {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .app-footer {
