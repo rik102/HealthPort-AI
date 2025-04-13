@@ -7,20 +7,60 @@ import AnalysisResults from './components/AnalysisResults';
 import AboutPage from './components/About';
 import HistoryPage from './components/History';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
+
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+//import jwt_decode from 'jwt-decode';
+import GoogleSignInButton from './components/GoogleSignInButton';
 
 function App() {
   const [analysis, setAnalysis] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  const [user, setUser] = useState(null);
 
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      //const decoded = jwt_decode(tokenResponse.credential);
+      try {
+      const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          Authorization: 'Bearer ${tokenResponse.access_token}',
+        },
+      });
+      const userInfo = await res.json();
+      console.log('User info:', decoded);
+      setUser(userInfo);
+      localStorage.setItem('user', JSON.stringify(userInfo));
+    } catch (error) {
+      console.error("Failed to fetch the user info:", error);
+    }
+  },
+    onError: (err) => {
+      console.error('Google login error', err);
+    }
+  });
 
+/*
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      const decoded = jwt_decode(tokenResponse.credential);
+      console.log('User info:', decoded);
+      setUser(decoded);
+      localStorage.setItem('token', tokenResponse.credential);
+    },
+    onError: (err) => {
+      console.error('Google login error', err);
+    }
+  });
+*/
+/*
   const handleGoogleSignIn = () => {
     console.log('Google sign-in clicked');
     // Implement Google sign-in logic here
 
 
   };
+*/
 
   const handleFileUpload = async (file) => {
     // Clear previous analysis when new file is uploaded
@@ -59,7 +99,8 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <NavBar handleGoogleSignIn={handleGoogleSignIn} />
+        {/* THIS WAS THE ISSUE, well one of them */}
+        <NavBar handleGoogleSignIn={login} />
         
         <div className="background-animation">
           <div className="gradient-circle circle-1"></div>
