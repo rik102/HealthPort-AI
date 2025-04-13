@@ -100,14 +100,16 @@ VITE_API_URL=http://localhost:8000
 1. Start the backend server:
 ```bash
 cd backend
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate # source venv/bin/activate On Mac: 
+pip install -r requirements.txt #(if not already)
 uvicorn main:app --reload
 ```
 
 2. Start the frontend development server:
 ```bash
 cd frontend
-npm run dev
+pnpm i #(if not already)
+pnpm run dev
 ```
 
 3. Open your browser and navigate to `http://localhost:5173`
