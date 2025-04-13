@@ -85,26 +85,30 @@
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0;
-  font-size: 0.95rem;
+  margin: 1.5rem 0;
   background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .data-table th {
-  background: #f8f9fa;
-  color: #333;
-  font-weight: 600;
-  text-align: left;
+  background-color: #f8f8f8;
   padding: 1rem;
-  border-bottom: 2px solid #1DB954;
-  white-space: nowrap;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .data-table td {
   padding: 1rem;
-  border-bottom: 1px solid #eee;
-  color: #444;
-  line-height: 1.4;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
 }
 
 /* Value Status Styles */

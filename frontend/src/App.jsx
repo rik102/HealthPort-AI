@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 import UploadForm from './components/UploadForm';
 import AnalysisResults from './components/AnalysisResults';
 import GoogleSignInButton from './components/GoogleSignInButton';
+import Dashboard from './components/Dashboard';
+import History from './components/History';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
@@ -11,6 +14,22 @@ const MainContent = () => {
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const login = useGoogleLogin({
     onSuccess: async (response) => {
@@ -34,6 +53,11 @@ const MainContent = () => {
     },
   });
 
+  const handleLogout = () => {
+    setUser(null);
+    setShowDropdown(false);
+  };
+
   const handleFileUpload = async (file, analysisData) => {
     try {
       if (!analysisData) {
@@ -49,69 +73,93 @@ const MainContent = () => {
   };
 
   return (
-    <div className="app-container">
-      <div className="content-wrapper">
-        <header className="app-header">
-          <div className="header-content">
-            <div className="logo-container">
-              <h1 className="logo-text">HealthPort AI</h1>
-              <p className="logo-subtitle">Your AI-Powered Health Report Analyzer</p>
-            </div>
-            <div className="signin-button-container">
-              {user ? (
-                <div className="user-info">
-                  <img src={user.picture} alt={user.name} className="user-avatar" />
-                  <span className="user-name">{user.name}</span>
+    <Router>
+      <div className="app-container">
+        <div className="content-wrapper">
+          <header className="app-header">
+            <div className="header-content">
+              <Link to="/" className="logo-container">
+                <h1 className="logo-text">HealthPort AI</h1>
+                <p className="logo-subtitle">Your AI-Powered Health Report Analyzer</p>
+              </Link>
+              <div className="nav-links">
+                {user && (
+                  <>
+                    <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                    <Link to="/history" className="nav-link">History</Link>
+                  </>
+                )}
+                <div className="signin-button-container" ref={dropdownRef}>
+                  {user ? (
+                    <div className="user-info" onClick={() => setShowDropdown(!showDropdown)}>
+                      <img src={user.picture} alt={user.name} className="user-avatar" />
+                      <span className="user-name">{user.name}</span>
+                      {showDropdown && (
+                        <div className="dropdown-menu">
+                          <button onClick={handleLogout} className="dropdown-item">Logout</button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <GoogleSignInButton onClick={login} />
+                  )}
                 </div>
-              ) : (
-                <GoogleSignInButton onClick={login} />
-              )}
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <main className="main-content">
-          <section className="hero-section">
-            <div className="hero-text">
-              <h2>Transform Your Medical Reports</h2>
-              <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
-            </div>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">98%</div>
-                <div className="stat-label">Accuracy</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">24/7</div>
-                <div className="stat-label">Availability</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">Instant</div>
-                <div className="stat-label">Analysis</div>
-              </div>
-            </div>
-          </section>
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <section className="hero-section">
+                    <div className="hero-text">
+                      <h2>Transform Your Medical Reports</h2>
+                      <p>Upload your medical reports and get instant, AI-powered analysis and insights.</p>
+                    </div>
+                    <div className="hero-stats">
+                      <div className="stat-item">
+                        <div className="stat-number">98%</div>
+                        <div className="stat-label">Accuracy</div>
+                      </div>
+                      <div className="stat-item">
+                        <div className="stat-number">24/7</div>
+                        <div className="stat-label">Availability</div>
+                      </div>
+                      <div className="stat-item">
+                        <div className="stat-number">Instant</div>
+                        <div className="stat-label">Analysis</div>
+                      </div>
+                    </div>
+                  </section>
 
-          <section className="upload-section">
-            {!analysis ? (
-              <UploadForm onUpload={handleFileUpload} />
-            ) : (
-              <AnalysisResults analysis={analysis} />
+                  <section className="upload-section">
+                    {!analysis ? (
+                      <UploadForm onUpload={handleFileUpload} />
+                    ) : (
+                      <AnalysisResults analysis={analysis} />
+                    )}
+                  </section>
+                </>
+              } />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/history" element={<History />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
             )}
-          </section>
+          </main>
 
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
-        </main>
-
-        <footer className="app-footer">
-          <p>© 2025 HealthPort AI. All rights reserved.</p>
-        </footer>
+          <footer className="app-footer">
+            <p>© 2025 HealthPort AI. All rights reserved.</p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
